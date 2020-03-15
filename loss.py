@@ -17,7 +17,7 @@ class SpreadLoss(torch.nn.Module):
 
         assert 0 <= label.min() <= 39
 
-        print((at - ai).max(), (at - ai).min())
+        # print((at - ai).max(), (at - ai).min())
         return torch.mean(torch.sum(torch.max(torch.zeros_like(ai).cuda(), self.margin - (at - ai)) ** 2, -1))
 
 

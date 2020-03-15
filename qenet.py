@@ -82,7 +82,7 @@ def qedr(input_t, input_capsule, input_a, k=3):
     for _ in range(k):
         assignment = activation * torch.sigmoid(-quat_dist(output_capsule[..., None, :], votes))  # B x N x M x KNc
         output_capsule = quat_avg(votes, assignment)  # B x N x M x 4
-    output_activation = torch.sigmoid(-torch.sum(quat_dist(output_capsule[..., None, :], votes), -1))
+    output_activation = torch.sigmoid(-torch.mean(quat_dist(output_capsule[..., None, :], votes), -1))
     return output_capsule, output_activation
 
 

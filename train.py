@@ -18,7 +18,7 @@ def train(cfg):
     model.train()
 
     crit = SpreadLoss(cfg.min_margin)
-    opt = torch.optim.Adam(model.parameters(), lr=0)
+    opt = torch.optim.Adam(model.parameters(), lr=1e-3)
 
     for e in range(cfg.max_epoch):
         td = tqdm(dataloader)
@@ -33,16 +33,13 @@ def train(cfg):
 
             # with torch.autograd.detect_anomaly():
             output_cap, output_a = model(pts, lrfs)
-            loss = torch.sum(output_a)
-            # loss = crit(output_a, labels)
+            loss = crit(output_a, labels)
             loss.backward()
-            torch.nn.utils.clip_grad_norm_(model.parameters(), 0.01)
-            # for p in model.parameters():
-                # print(p.grad.max(), p.grad.min())
-                # assert not torch.any(torch.isnan(p.grad))
+            # torch.nn.utils.clip_grad_norm_(model.parameters(), 0.01)
+
             for p in model.parameters():
                 assert not torch.any(torch.isnan(p.grad))
-            # opt.step()
+            opt.step()
 
             td.set_description('iter {}/{}'.format(i, len(td)))
             td.set_postfix({'loss': loss.item()})
