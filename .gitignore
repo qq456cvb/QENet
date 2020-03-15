@@ -1,0 +1,5 @@
+outputs
+.*
+!.gitignore
+__pycache__
+tf/train_log
